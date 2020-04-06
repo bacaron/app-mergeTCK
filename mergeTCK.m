@@ -6,6 +6,8 @@ function [] = mergeTCK()
 % Dependencies:
 % mrtrix3
 
+clear all; close all; clc;
+
 % Setup json lab.
 if ~isdeployed
     
@@ -32,13 +34,9 @@ for i_tcks = 1:N_tcks
         % Initiate new tck information for this subject.
         mergedtck = tck_temp.data;
         
-        % Initiate seed and track counters for this subject, if necessary.
-        if isfield(tck_temp, 'max_num_seeds') == 1
-            count_seed = tck_temp.max_num_seeds;
-        end
-        if isfield(tck_temp, 'max_num_tracks') == 1
-            count_track = tck_temp.max_num_tracks;
-        end
+        % Initiate seed and track counters for this subject.
+        count_seed = tck_temp.max_num_seeds;
+        count_track = tck_temp.max_num_tracks;
         
         % Update user -- NOTE: Update to get subject ID from config file.
         disp(['Started merging TCK files for the a new subject. Merging ' num2str(i_tcks) ' of ' num2str(N_tcks) ' TCKs.'])
@@ -48,13 +46,9 @@ for i_tcks = 1:N_tcks
         % Append tck for this tck to previously added tcks for this subject.
         mergedtck = [mergedtck tck_temp.data];
         
-        % Update counters for seed and track counts for this subject, if necessary.
-        if isfield(tck_temp, 'max_num_seeds') == 1
-            count_seed = count_seed + tck_temp.max_num_seeds;
-        end
-        if isfield(tck_temp, 'max_num_tracks') == 1
-            count_track = count_track + tck_temp.max_num_tracks;
-        end
+        % Update counters for seed and track counts for this subject.
+        count_seed = count_seed + tck_temp.max_num_seeds;
+        count_track = count_track + tck_temp.max_num_tracks;
         
         % Update user -- NOTE: Update to get subject ID from config file.
         disp(['... merging ' num2str(i_tcks) ' of ' num2str(N_tcks) ' TCKs.'])
@@ -67,17 +61,12 @@ end % end for i_tcks
 tck_temp.data = mergedtck;
 
 % Update basic header information -- NOTE: Does this result in accurate header information for the merged tck?
-if isfield(tck_temp, 'count') == 1
-    tck_temp.count = length(tck_temp.data);
-end
-if isfield(tck_temp, 'total_count') == 1
-    tck_temp.total_count = length(tck_temp.data);
-end
+tck_temp.count = length(tck_temp.data);
+tck_temp.total_count = length(tck_temp.data);
 
 % Update user -- NOTE: Update to get subject ID from config file.
 disp('Writing merged TCK file for this subject...')
- 
-% Make the output directory if it does not alreayd exist.
+        
 if ~exist('output')
     
     mkdir output
@@ -89,4 +78,3 @@ write_mrtrix_tracks(tck_temp, 'output/track.tck')
 
 % Update user -- NOTE: Update to get subject ID from config file.
 disp(['Finished writing merged TCK file for this subject: ' num2str(tck_temp.total_count) ' total streamlines.'])
-
