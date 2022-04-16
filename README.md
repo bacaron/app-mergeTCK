@@ -6,6 +6,7 @@ Merge multiple TCK files into one TCK file.
 
 ### Author
 - Sophia Vinci-Booher (svincibo@indiana.edu)
+- Brad Caron (bacaron@utexas.edu)
 
 ### Contributor
 - Soichi Hayashi (hayashis@iu.edu)
