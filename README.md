@@ -1,41 +1,42 @@
 <h1 align="center">mergeTCK</h1>
 
 <p align="center">
-  Merges multiple tractograms into one .tck file with MRtrix3 tckedit.
+  Merges two MRtrix .tck tractograms into one .tck tractogram with a compiled MATLAB script.
 </p>
 
 <p align="center">
   <a href="https://github.com/brainlife/abcd-spec"><img src="https://img.shields.io/badge/ABCD_Spec-v1.1-green.svg" alt="ABCD Spec v1.1"></a>
-  <a href="https://doi.org/10.25663/brainlife.app.608"><img src="https://img.shields.io/badge/Brainlife-brainlife.app.608-blue.svg" alt="Run on brainlife.io"></a>
+  <a href="https://doi.org/10.25663/brainlife.app.304"><img src="https://img.shields.io/badge/Brainlife-brainlife.app.304-blue.svg" alt="Run on brainlife.io"></a>
 </p>
 
 ## At a glance
 
 <!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
 
-> **Merges multiple tractograms into one .tck file with MRtrix3 tckedit.**
+> **Merges two MRtrix .tck tractograms into one .tck tractogram with a compiled MATLAB script.**
 
-Concatenates the streamlines of all input .tck tractograms (multi input) into track/track.tck using MRtrix3 tckedit. Use it to combine tractograms generated separately (for example with different algorithms or parameters) for the same subject. All tractograms should be in the same space.
+Copy of mergeTCK that takes exactly two single tractograms (track1 and track2), concatenates their streamlines and writes one merged track.tck. It exists as a workaround for Pipelines, which could not pass multi-input datatypes. Use mergeTCK to merge more than two tractograms; both inputs should be in the same space.
 
 | | |
 |---|---|
-| **Inputs** | `neuro/track/tck` |
+| **Inputs** | `neuro/track/tck` ×2 |
 | **Outputs** | `neuro/track/tck` |
-| **Container** | `brainlife/mrtrix3:3.0_RC3` |
-| **Resources** | 4 CPUs |
-| **Run it** | [doi.org/10.25663/brainlife.app.608](https://doi.org/10.25663/brainlife.app.608) |
+| **Container** | `brainlife/mcr:r2019a` |
+| **Resources** | 1 CPUs · 30 GB memory · 0.33 h walltime |
+| **Run it** | [doi.org/10.25663/brainlife.app.304](https://doi.org/10.25663/brainlife.app.304) |
 
 #### Inputs
 
 | Input | Datatype | Required | Description |
 |---|---|---|---|
-| `track` | `neuro/track/tck` | yes | Tractograms (.tck) to merge; several datasets can be selected. |
+| `track1` | `neuro/track/tck` | yes | First MRtrix .tck tractogram to merge. |
+| `track2` | `neuro/track/tck` | yes | Second MRtrix .tck tractogram to merge, in the same space as the first. |
 
 #### Outputs
 
 | Output | Datatype | Description |
 |---|---|---|
-| `track` | `neuro/track/tck` | Single .tck tractogram containing the streamlines of all inputs. |
+| `track` | `neuro/track/tck` | A single track.tck containing the streamlines of both inputs. |
 
 <!-- brainlife-app:end -->
 
@@ -45,25 +46,26 @@ This repository hosts several Apps, each built from its own branch.
 
 | App | Branch | Run it | Status |
 |---|---|---|---|
-| Merge Tractography (tcks) together with MRTrix3 | [`gttwo-tck`](https://github.com/bacaron/app-mergeTCK/tree/gttwo-tck) | [doi:10.25663/brainlife.app.608](https://doi.org/10.25663/brainlife.app.608) | current |
-| Merge Tractography (tcks) together with MRTrix3 (Two Tcks) | [`two-tck`](https://github.com/bacaron/app-mergeTCK/tree/two-tck) | [doi:10.25663/brainlife.app.305](https://doi.org/10.25663/brainlife.app.305) | available |
+| merge2TCKs | [`master`](https://github.com/svincibo/app-mergeTCK/tree/master) | [doi:10.25663/brainlife.app.304](https://doi.org/10.25663/brainlife.app.304) | current |
+| mergeTCK | [`master`](https://github.com/svincibo/app-mergeTCK/tree/master) | [doi:10.25663/brainlife.app.219](https://doi.org/10.25663/brainlife.app.219) | available |
 
 ## Running the App
 
 ### On brainlife.io
 
-Open the App at [doi.org/10.25663/brainlife.app.608](https://doi.org/10.25663/brainlife.app.608), choose `neuro/track/tck` from your project and press **Execute**. The results are saved to your project as `neuro/track/tck`.
+Open the App at [doi.org/10.25663/brainlife.app.304](https://doi.org/10.25663/brainlife.app.304), choose `neuro/track/tck`, `neuro/track/tck` from your project and press **Execute**. The results are saved to your project as `neuro/track/tck`.
 
 ### Locally
 
-You need [Singularity/Apptainer](https://apptainer.org/) (the App runs in `brainlife/mrtrix3:3.0_RC3`), [`jq`](https://jqlang.github.io/jq/).
+You need [Singularity/Apptainer](https://apptainer.org/) (the App runs in `brainlife/mcr:r2019a`), [`jq`](https://jqlang.github.io/jq/).
 
-1. Clone this repository and check out the App's branch (`git checkout gttwo-tck`).
+1. Clone this repository and check out the App's branch (`git checkout master`).
 2. Create `config.json` with the paths to your inputs and the parameters:
 
    ```json
    {
-       "track": "/path/to/track/track"
+       "track1": "/path/to/track1/track1",
+       "track2": "/path/to/track2/track2"
    }
    ```
 
@@ -71,7 +73,7 @@ You need [Singularity/Apptainer](https://apptainer.org/) (the App runs in `brain
 
 ## Troubleshooting
 
-- **failed**: Check that the inputs are valid .tck files.
+- **mergeTCK didn't produce track.tck**: Check that both inputs are readable MRtrix tractograms.
 
 ## Sample Datasets
 
@@ -91,7 +93,7 @@ bl dataset download 5c0c5faff6f108004b490ed8 && mv 5c0c5faff6f108004b490ed8 inpu
 
 If you use this App, please cite it, the software it builds on and brainlife.io:
 
-- Merge Tractography (tcks) together with MRTrix3. brainlife.io App. [doi:10.25663/brainlife.app.608](https://doi.org/10.25663/brainlife.app.608)
+- merge2TCKs. brainlife.io App. [doi:10.25663/brainlife.app.304](https://doi.org/10.25663/brainlife.app.304)
 - Tournier et al. MRtrix3: A fast, flexible and open software framework for medical image processing and visualisation. *NeuroImage* 202:116137 (2019). [doi:10.1016/j.neuroimage.2019.116137](https://doi.org/10.1016/j.neuroimage.2019.116137)
 - Hayashi S, Caron BA, Heinsfeld AS, et al. brainlife.io: a decentralized and open-source cloud platform to support neuroscience research. *Nature Methods* 21:809–813 (2024). [doi:10.1038/s41592-024-02237-2](https://doi.org/10.1038/s41592-024-02237-2)
 - Avesani P, McPherson B, Hayashi S, et al. The open diffusion data derivatives, brain data upcycling via integrated publishing of derivatives and reproducible open cloud services. *Scientific Data* 6:69 (2019). [doi:10.1038/s41597-019-0073-y](https://doi.org/10.1038/s41597-019-0073-y)
@@ -99,7 +101,6 @@ If you use this App, please cite it, the software it builds on and brainlife.io:
 ## Authors
 
 - Sophia Vinci-Booher
-- Brad Caron
 
 **Contributor**
 
