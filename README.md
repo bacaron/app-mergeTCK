@@ -2,6 +2,35 @@
 [![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.219-blue.svg)](https://doi.org/10.25663/bl.app.219)
 
 # app-mergeTCK
+
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Merges multiple tractograms into one .tck file with MRtrix3 tckedit.**
+
+Concatenates the streamlines of all input .tck tractograms (multi input) into track/track.tck using MRtrix3 tckedit. Use it to combine tractograms generated separately (for example with different algorithms or parameters) for the same subject. All tractograms should be in the same space.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/track/tck` |
+| 📤 **Outputs** | `neuro/track/tck` |
+| 🐳 **Container** | `brainlife/mrtrix3:3.0_RC3` |
+| ⚙️ **Resources** | 4 CPUs |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.608](https://doi.org/10.25663/brainlife.app.608) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `track` | `neuro/track/tck` | yes | Tractograms (.tck) to merge; several datasets can be selected. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `track` | `neuro/track/tck` | Single .tck tractogram containing the streamlines of all inputs. |
+
+<!-- brainlife-app:end -->
+
 Merge multiple TCK files into one TCK file.
 
 ### Author
